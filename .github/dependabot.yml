@@ -10,15 +10,16 @@ updates:
     schedule:
       interval: "daily"
     assignees:
-      - "daum3ns"
-      - "arminabf"
-      - "kabbohus"
+      - "aaronspruit"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     assignees:
-      - "daum3ns"
-      - "arminabf"
-      - "kabbohus"
-      - "sh00mster"
+      - "aaronspruit"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "aaronspruit"
