@@ -1,8 +1,9 @@
 # Changelog
 
-## [v1.3.6] - 2026-XX-XX
+## [v1.4.0] - 2026-XX-XX
 
 ### Changed
+- Bump github.com/corazawaf/coraza/v3 from 3.4.0 to 3.5.0 ([#7](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/7))
 - Bump docker/metadata-action from 5 to 6 ([#3](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/3))
 - Bump docker/build-push-action from 6 to 7 ([#4](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/4))
 - Bump docker/login-action from 3 to 4 ([#5](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/5))
