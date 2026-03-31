@@ -63,8 +63,9 @@ jobs:
         if: steps.current.outputs.version != steps.latest.outputs.version
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.CRS_BOT_TOKEN }}
           commit-message: "Update CRS to v${{ steps.latest.outputs.version }}"
-          title: "Update CRS to v${{ steps.latest.outputs.version }}"
+          title: "chore: update CRS to v${{ steps.latest.outputs.version }}"
           body: |
             Automated update of OWASP Core Rule Set from v${{ steps.current.outputs.version }} to v${{ steps.latest.outputs.version }}.
 
@@ -75,5 +76,6 @@ jobs:
             - Updated `CRS_VERSION` tracking file
 
             [Release notes](https://github.com/coreruleset/coreruleset/releases/tag/v${{ steps.latest.outputs.version }})
-          branch: update-crs/v${{ steps.latest.outputs.version }}
+          branch: chore/update-crs-v${{ steps.latest.outputs.version }}
           labels: dependencies
+          assignees: aaronspruit
