@@ -3,6 +3,7 @@
 ## [v1.4.0] - 2026-XX-XX
 
 ### Changed
+- Update CRS to version 4.25.0
 - Switch to using slog for logging ([#67](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/67))([kabbohus](https://github.com/kabbohus)) ([#70](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/70))([kabbohus](https://github.com/kabbohus))
 
 ## [v1.3.1-alpha] - 2026-03-30
