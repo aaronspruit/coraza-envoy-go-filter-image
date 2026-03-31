@@ -1,6 +1,7 @@
 BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders
 GOLANG-CI-LINT-VERSION := v2.10.1
 BUILD-DIRECTORY := ./build
+CRS_VERSION := $(shell cat CRS_VERSION | tr -d '[:space:]')
 
 .PHONY: build
 # build:
@@ -27,7 +28,7 @@ e2e: clean build buildTestEnvoy
 	docker compose --file tests/e2e/docker-compose.yml down
 
 ftw: clean build buildTestEnvoy
-	docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
+	CRS_VERSION=$(CRS_VERSION) docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
 	docker compose --file tests/ftw/docker-compose.yml down
 
 clean:

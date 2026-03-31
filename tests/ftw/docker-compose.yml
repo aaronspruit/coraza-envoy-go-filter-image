@@ -53,6 +53,8 @@ services:
       - goFilter-logs
     build:
       context: .
+      args:
+        CRS_VERSION: ${CRS_VERSION}
     environment:
       - FTW_CLOUDMODE
       - FTW_INCLUDE
