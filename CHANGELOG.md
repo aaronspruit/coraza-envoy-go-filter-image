@@ -5,6 +5,7 @@
 ### Changed
 - Bump docker/metadata-action from 5 to 6 ([#3](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/3))
 - Bump docker/build-push-action from 6 to 7 ([#4](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/4))
+- Bump docker/login-action from 3 to 4 ([#5](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/5))
 
 ## [v1.3.5] - 2026-03-31
 
