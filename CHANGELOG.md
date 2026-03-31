@@ -1,16 +1,14 @@
 # Changelog
 
-## [v1.4.0] - 2026-XX-XX
-
-### Changed
-- Update CRS to version 4.25.0
-- Switch to using slog for logging ([#67](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/67))([kabbohus](https://github.com/kabbohus)) ([#70](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/70))([kabbohus](https://github.com/kabbohus))
-
-## [v1.3.1-alpha] - 2026-03-30
+## [v1.3.5] - 2026-03-31
 
 ### Changed
 - Update CRS to version 4.25 ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
 - Reduced image size ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
+
+## [v1.3.1-alpha] - 2026-03-30
+
+### Changed
 - Pin Envoy base image to `contrib-v1.37.1` instead of `contrib-dev` ([aaronspruit](https://github.com/aaronspruit))
 - Reduce final Docker image size by copying libre2 from build stage instead of installing via apt ([aaronspruit](https://github.com/aaronspruit))
 - Publish Docker image to GitHub Container Registry on release ([aaronspruit](https://github.com/aaronspruit))
