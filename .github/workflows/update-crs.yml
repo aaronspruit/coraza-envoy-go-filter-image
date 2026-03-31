@@ -57,6 +57,11 @@ jobs:
 
           # FTW Dockerfile and docker-compose read CRS_VERSION at build time, no update needed
 
+          # Update CHANGELOG.md — append entry under the latest unreleased "### Changed" section
+          sed -i "0,/^### Changed$/{ /^### Changed$/a\\
+- Update CRS to version ${LATEST}
+}" CHANGELOG.md
+
           rm -rf /tmp/crs
 
       - name: Create Pull Request
