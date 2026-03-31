@@ -20,8 +20,6 @@ ENTRYPOINT ["/usr/bin/cp", "/src/coraza-waf.so", "/build"]
 
 FROM envoyproxy/envoy:contrib-v1.37.1 AS envoy-coraza
 COPY --from=build /usr/local/lib/libinjection.so* /usr/local/lib/
+COPY --from=build /usr/lib/x86_64-linux-gnu/libre2.so* /usr/lib/x86_64-linux-gnu/
 COPY --from=build /src/coraza-waf.so /etc/envoy/coraza-waf.so
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libre2-9 && \
-    rm -rf /var/lib/apt/lists/* && \
-    ldconfig
+RUN ldconfig
