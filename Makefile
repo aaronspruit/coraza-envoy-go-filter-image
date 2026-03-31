@@ -3,18 +3,18 @@ GOLANG-CI-LINT-VERSION := v2.10.1
 BUILD-DIRECTORY := ./build
 
 .PHONY: build
-build:
-	mkdir -p $(BUILD-DIRECTORY)
-	go build -o $(BUILD-DIRECTORY)/coraza-waf.so -buildmode=c-shared -tags=$(BUILD-TAGS)
+# build:
+# 	mkdir -p $(BUILD-DIRECTORY)
+# 	go build -o $(BUILD-DIRECTORY)/coraza-waf.so -buildmode=c-shared -tags=$(BUILD-TAGS)
 
-performanceBuild:
+build:
 	mkdir -p $(BUILD-DIRECTORY)
 	docker build --target build --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-builder
 	docker cp $$(docker create coraza-waf-builder):/src/coraza-waf.so $(BUILD-DIRECTORY)
 
 # Build the envoy image that we are going to use for tests and examples
 buildTestEnvoy:
-	docker build --target envoy --build-arg BUILD_TAGS=$(BUILD-TAGS) . -t coraza-waf-envoy
+	docker build --target envoy --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-envoy
 
 runExample: build buildTestEnvoy teardownExample
 	docker compose --file example/docker-compose.yml up -d
