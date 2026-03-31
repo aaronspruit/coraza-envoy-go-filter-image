@@ -1,9 +1,16 @@
 # Changelog
 
-## [v1.4.0] - 2026-XX-XX
+## [v1.3.6] - 2026-XX-XX
 
 ### Changed
-- Switch to using slog for logging ([#67](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/67))([kabbohus](https://github.com/kabbohus)) ([#70](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/70))([kabbohus](https://github.com/kabbohus))
+- Bump docker/metadata-action from 5 to 6 ([#3](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/3))
+- Bump docker/build-push-action from 6 to 7 ([#4](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/4))
+
+## [v1.3.5] - 2026-03-31
+
+### Changed
+- Update CRS to version 4.25 ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
+- Reduced image size ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
 
 ## [v1.3.1-alpha] - 2026-03-30
 
