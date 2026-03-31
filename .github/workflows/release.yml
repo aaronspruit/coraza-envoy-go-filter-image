@@ -21,7 +21,7 @@ jobs:
         with:
           go-version-file: 'go.mod'
       - name: Build shared object
-        run: make performanceBuild
+        run: make build
       - name: Run FTW tests
         run: make ftw
       - name: Run e2e tests
