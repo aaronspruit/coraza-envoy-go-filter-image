@@ -9,6 +9,8 @@
 ## [v1.3.1-alpha] - 2026-03-30
 
 ### Changed
+- Update CRS to version 4.25 ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
+- Reduced image size ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
 - Pin Envoy base image to `contrib-v1.37.1` instead of `contrib-dev` ([aaronspruit](https://github.com/aaronspruit))
 - Reduce final Docker image size by copying libre2 from build stage instead of installing via apt ([aaronspruit](https://github.com/aaronspruit))
 - Publish Docker image to GitHub Container Registry on release ([aaronspruit](https://github.com/aaronspruit))
