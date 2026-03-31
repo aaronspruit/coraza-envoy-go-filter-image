@@ -5,6 +5,15 @@
 ### Changed
 - Switch to using slog for logging ([#67](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/67))([kabbohus](https://github.com/kabbohus)) ([#70](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/70))([kabbohus](https://github.com/kabbohus))
 
+## [v1.3.1-alpha] - 2026-03-30
+
+### Changed
+- Pin Envoy base image to `contrib-v1.37.1` instead of `contrib-dev` ([aaronspruit](https://github.com/aaronspruit))
+- Reduce final Docker image size by copying libre2 from build stage instead of installing via apt ([aaronspruit](https://github.com/aaronspruit))
+- Publish Docker image to GitHub Container Registry on release ([aaronspruit](https://github.com/aaronspruit))
+- Use performance build in release workflow ([aaronspruit](https://github.com/aaronspruit))
+- Add Dependabot monitoring for Docker base image updates ([aaronspruit](https://github.com/aaronspruit))
+
 ## [v1.3.0] - 2026-03-12
 
 ### Changed
@@ -102,6 +111,7 @@ _First release._
 ### Known Issues
 - A bug in Coraza results in a wrong HTTP status code returned, if `SecResponseBodyLimit` is reached and `SecResponseBodyLimitAction` is set to `Reject`. Coraza incorrectly returns HTTP 413 instead of HTTP 500. ([corazawaf/coraza#1377](https://github.com/corazawaf/coraza/issues/1377))
 
+[v1.3.1-alpha]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.3.1-alpha
 [v1.3.0]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.3.0
 [v1.2.3]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.2.3
 [v1.2.2]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.2.2
