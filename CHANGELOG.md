@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.3.6] - 2026-XX-XX
+
+### Changed
+- Bump docker/metadata-action from 5 to 6 ([#3](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/3))
+
 ## [v1.3.5] - 2026-03-31
 
 ### Changed
