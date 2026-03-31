@@ -18,7 +18,10 @@ updates:
     assignees:
       - "aaronspruit"
   - package-ecosystem: "docker"
-    directory: "/"
+    directories:
+      - "/"
+      - "/tests/ftw"
+      - "/tests/e2e"
     schedule:
       interval: "weekly"
     assignees:
