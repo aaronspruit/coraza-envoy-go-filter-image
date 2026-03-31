@@ -25,6 +25,8 @@ static_resources:
                       plugin_config:
                           "@type": type.googleapis.com/xds.type.v3.TypedStruct
                           value:
+                              use_re2: true
+                              use_libinjection: true
                               directives: |
                                 {
                                   "waf1":{

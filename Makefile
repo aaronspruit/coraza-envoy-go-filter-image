@@ -2,33 +2,34 @@ BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders
 GOLANG-CI-LINT-VERSION := v2.10.1
 BUILD-DIRECTORY := ./build
 CRS_VERSION := $(shell cat CRS_VERSION | tr -d '[:space:]')
+export CRS_VERSION
 
 .PHONY: build
-# build:
-# 	mkdir -p $(BUILD-DIRECTORY)
-# 	go build -o $(BUILD-DIRECTORY)/coraza-waf.so -buildmode=c-shared -tags=$(BUILD-TAGS)
-
 build:
+	mkdir -p $(BUILD-DIRECTORY)
+	go build -o $(BUILD-DIRECTORY)/coraza-waf.so -buildmode=c-shared -tags=$(BUILD-TAGS)
+
+performanceBuild:
 	mkdir -p $(BUILD-DIRECTORY)
 	docker build --target build --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-builder
 	docker cp $$(docker create coraza-waf-builder):/src/coraza-waf.so $(BUILD-DIRECTORY)
 
 # Build the envoy image that we are going to use for tests and examples
 buildTestEnvoy:
-	docker build --target envoy --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-envoy
+	docker build --target envoy-coraza --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-envoy
 
-runExample: build buildTestEnvoy teardownExample
+runExample: performanceBuild buildTestEnvoy teardownExample
 	docker compose --file example/docker-compose.yml up -d
 
 teardownExample:
 	docker compose --file example/docker-compose.yml down
 
-e2e: clean build buildTestEnvoy
+e2e: clean performanceBuild buildTestEnvoy
 	docker compose --file tests/e2e/docker-compose.yml up --abort-on-container-exit tests; \
 	docker compose --file tests/e2e/docker-compose.yml down
 
-ftw: clean build buildTestEnvoy
-	CRS_VERSION=$(CRS_VERSION) docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
+ftw: clean performanceBuild buildTestEnvoy
+	docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
 	docker compose --file tests/ftw/docker-compose.yml down
 
 clean:
