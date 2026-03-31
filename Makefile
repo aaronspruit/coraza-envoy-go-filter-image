@@ -33,10 +33,10 @@ ftw: clean performanceBuild buildTestEnvoy
 	docker compose --file tests/ftw/docker-compose.yml down
 
 clean:
-	docker rmi -f coraza-waf-builder coraza-waf-envoy ftw-ftw ftw-ftw-crs e2e-sse-server e2e-tests envoy-check
 	docker compose --file example/docker-compose.yml down
 	docker compose --file tests/e2e/docker-compose.yml down
 	docker compose --file tests/ftw/docker-compose.yml down
+	docker rmi -f coraza-waf-builder coraza-waf-envoy ftw-ftw ftw-ftw-crs e2e-sse-server e2e-tests envoy-check
 	rm -rf $(BUILD-DIRECTORY)/*
 
 lint:
