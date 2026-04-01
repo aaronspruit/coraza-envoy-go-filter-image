@@ -25,13 +25,13 @@ teardownExample:
 	docker compose --file example/docker-compose.yml down
 
 e2e: clean performanceBuild buildTestEnvoy
-	docker compose --file tests/e2e/docker-compose.yml up --abort-on-container-exit --exit-code-from tests; \
+	docker compose --file tests/e2e/docker-compose.yml run --rm tests; \
 	exit_code=$$?; \
 	docker compose --file tests/e2e/docker-compose.yml down; \
 	exit $$exit_code
 
 ftw: clean performanceBuild buildTestEnvoy
-	docker compose --file tests/ftw/docker-compose.yml up --abort-on-container-exit --exit-code-from ftw-crs; \
+	docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
 	exit_code=$$?; \
 	docker compose --file tests/ftw/docker-compose.yml down; \
 	exit $$exit_code
