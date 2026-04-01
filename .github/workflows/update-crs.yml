@@ -19,7 +19,7 @@ jobs:
 
       - name: Get current CRS version
         id: current
-        run: echo "version=$(cat CRS_VERSION | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(grep '^crs=' CRS_VERSION | cut -d= -f2 | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
 
       - name: Get latest CRS release
         id: latest
@@ -52,8 +52,8 @@ jobs:
           # Update crs-setup.conf.example
           cp /tmp/crs/crs-setup.conf.example internal/config/rules/crs-setup.conf.example
 
-          # Update CRS_VERSION file
-          echo "${LATEST}" > CRS_VERSION
+          # Update CRS_VERSION file (preserve plugin entries)
+          sed -i "s/^crs=.*/crs=${LATEST}/" CRS_VERSION
 
           # FTW Dockerfile and docker-compose read CRS_VERSION at build time, no update needed
 

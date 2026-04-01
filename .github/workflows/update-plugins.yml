@@ -1,0 +1,140 @@
+name: Update CRS Plugins
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-plugins:
+    name: Check for CRS plugin updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v6
+
+      - name: Update plugins
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+
+          PLUGINS_DIR="internal/config/rules/plugins"
+          VERSION_FILE="CRS_VERSION"
+
+          # Fetch the plugin registry README and parse the table
+          # Extract lines matching: | name | range | [owner/repo](url) | type | status |
+          registry=$(curl -sL "https://raw.githubusercontent.com/coreruleset/plugin-registry/main/README.md")
+
+          # Parse plugin repos from the markdown table
+          # Format: | name | range | [owner/repo](https://github.com/owner/repo) | type | status | ...
+          repos=()
+          while IFS= read -r line; do
+            # Extract repo slug from markdown link: [owner/repo](https://github.com/owner/repo)
+            if [[ "$line" =~ \[([a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+)\]\(https://github\.com/ ]]; then
+              repo="${BASH_REMATCH[1]}"
+
+              # Skip draft/private plugins
+              if echo "$line" | grep -qi "draft\|Private"; then
+                echo "Skipping $repo (draft/private)"
+                continue
+              fi
+
+              repos+=("$repo")
+            fi
+          done <<< "$registry"
+
+          echo "Found ${#repos[@]} candidate plugins"
+
+          updated=()
+          mkdir -p "$PLUGINS_DIR"
+
+          for repo in "${repos[@]}"; do
+            echo "---"
+            echo "Checking $repo..."
+
+            # Get latest release tag
+            latest_tag=$(gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null || true)
+            if [ -z "$latest_tag" ]; then
+              echo "  No release found for $repo, skipping"
+              continue
+            fi
+
+            latest_version="${latest_tag#v}"
+            plugin_name=$(basename "$repo")
+
+            # Check current version in CRS_VERSION
+            current_version=$(grep "^${repo}=" "$VERSION_FILE" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]' || true)
+
+            if [ "$current_version" = "$latest_version" ]; then
+              echo "  $plugin_name is up to date ($latest_version)"
+              continue
+            fi
+
+            echo "  Updating $plugin_name: ${current_version:-<new>} -> $latest_version"
+
+            # Download the release tarball and extract plugins/ directory
+            tarball_url="https://github.com/$repo/archive/refs/tags/$latest_tag.tar.gz"
+            tmpdir=$(mktemp -d)
+            curl -sL "$tarball_url" -o "$tmpdir/plugin.tar.gz"
+
+            # Extract only the plugins/ directory
+            if tar -tzf "$tmpdir/plugin.tar.gz" | grep -q '/plugins/'; then
+              tar -xzf "$tmpdir/plugin.tar.gz" -C "$tmpdir" --strip-components=1 '*/plugins/*'
+              cp "$tmpdir/plugins/"* "$PLUGINS_DIR/" 2>/dev/null || true
+              echo "  Installed plugin files from $plugin_name"
+            else
+              echo "  WARNING: No plugins/ directory found in $repo $latest_tag"
+              rm -rf "$tmpdir"
+              continue
+            fi
+
+            rm -rf "$tmpdir"
+
+            # Update version in CRS_VERSION
+            if grep -q "^${repo}=" "$VERSION_FILE"; then
+              sed -i "s|^${repo}=.*|${repo}=${latest_version}|" "$VERSION_FILE"
+            else
+              echo "${repo}=${latest_version}" >> "$VERSION_FILE"
+            fi
+
+            updated+=("$plugin_name: ${current_version:-new} -> $latest_version")
+          done
+
+          if [ ${#updated[@]} -eq 0 ]; then
+            echo "All plugins are up to date"
+            exit 0
+          fi
+
+          echo "---"
+          echo "Updated plugins:"
+          printf '  - %s\n' "${updated[@]}"
+
+          # Write summary for PR body
+          {
+            echo "UPDATED_PLUGINS<<EOF"
+            printf '- %s\n' "${updated[@]}"
+            echo "EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Create Pull Request
+        if: env.UPDATED_PLUGINS != ''
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.CRS_BOT_TOKEN }}
+          commit-message: "chore: update CRS plugins"
+          title: "chore: update CRS plugins"
+          body: |
+            Automated update of CRS plugins from the [plugin registry](https://github.com/coreruleset/plugin-registry).
+
+            Updated plugins:
+            ${{ env.UPDATED_PLUGINS }}
+
+            Plugin files are installed to `internal/config/rules/plugins/`.
+          branch: chore/update-crs-plugins
+          labels: dependencies
+          assignees: aaronspruit
