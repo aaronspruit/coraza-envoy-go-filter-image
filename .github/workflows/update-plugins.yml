@@ -57,17 +57,36 @@ jobs:
             echo "---"
             echo "Checking $repo..."
 
-            # Get latest release tag (gh api exits non-zero on 404)
-            if ! latest_tag=$(gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null); then
-              echo "  No release found for $repo, skipping"
-              continue
-            fi
-            if [ -z "$latest_tag" ] || [[ "$latest_tag" == *"Not Found"* ]]; then
-              echo "  No release found for $repo, skipping"
-              continue
+            # Get latest release tag, or fall back to default branch HEAD commit
+            http_code=$(curl -sL -o /tmp/release.json -w "%{http_code}" \
+              ${GH_TOKEN:+-H "Authorization: Bearer ${GH_TOKEN}"} \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$repo/releases/latest" 2>/dev/null)
+
+            if [ "$http_code" = "200" ]; then
+              latest_tag=$(grep -o '"tag_name"[[:space:]]*:[[:space:]]*"[^"]*"' /tmp/release.json | head -1 | sed 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+              latest_version="${latest_tag#v}"
+              tarball_url="https://github.com/$repo/archive/refs/tags/$latest_tag.tar.gz"
+            else
+              # No release — get default branch HEAD commit
+              commit_http=$(curl -sL -o /tmp/commits.json -w "%{http_code}" \
+                ${GH_TOKEN:+-H "Authorization: Bearer ${GH_TOKEN}"} \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/$repo/commits?per_page=1" 2>/dev/null)
+              if [ "$commit_http" != "200" ]; then
+                echo "  Could not fetch commits for $repo (HTTP $commit_http), skipping"
+                continue
+              fi
+              latest_version=$(grep -o '"sha"[[:space:]]*:[[:space:]]*"[^"]*"' /tmp/commits.json | head -1 | sed 's/.*"sha"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+              if [ -z "$latest_version" ]; then
+                echo "  Could not determine HEAD commit for $repo, skipping"
+                continue
+              fi
+              # Use short SHA for display but full SHA for version tracking
+              tarball_url="https://github.com/$repo/archive/${latest_version}.tar.gz"
+              echo "  No release found, using HEAD commit ${latest_version:0:7}"
             fi
 
-            latest_version="${latest_tag#v}"
             plugin_name=$(basename "$repo")
 
             # Check current version in CRS_VERSION
@@ -80,14 +99,13 @@ jobs:
 
             echo "  Updating $plugin_name: ${current_version:-<new>} -> $latest_version"
 
-            # Download the release tarball and extract plugins/ directory
-            tarball_url="https://github.com/$repo/archive/refs/tags/$latest_tag.tar.gz"
+            # Download the tarball and extract plugins/ directory
             tmpdir=$(mktemp -d)
             curl -sL "$tarball_url" -o "$tmpdir/plugin.tar.gz"
 
             # Extract only the plugins/ directory
             if tar -tzf "$tmpdir/plugin.tar.gz" | grep -q '/plugins/'; then
-              tar -xzf "$tmpdir/plugin.tar.gz" -C "$tmpdir" --strip-components=1 '*/plugins/*'
+              tar -xzf "$tmpdir/plugin.tar.gz" -C "$tmpdir" --strip-components=1 --wildcards '*/plugins/*'
               cp "$tmpdir/plugins/"* "$PLUGINS_DIR/" 2>/dev/null || true
               echo "  Installed plugin files from $plugin_name"
             else
