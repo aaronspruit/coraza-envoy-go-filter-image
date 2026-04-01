@@ -210,10 +210,30 @@ plugin_config:
       }
     default_directive: "waf1"
 ```
-
 #### Recommendations using CRS with Envoy Go
 
 - In order to mitigate as much as possible malicious requests (or connections open) sent upstream, it is recommended to keep the [CRS Early Blocking](https://coreruleset.org/20220302/the-case-for-early-blocking/) feature enabled (SecAction [`900120`](./src/rules/crs-setup.conf.example)).
+
+## Using CRS Plugins
+
+[CRS Plugins](https://github.com/coreruleset/plugin-registry) come embedded in the extension (except for draft or private ones).  In order to use it in the config, you just need to include it directly in the rules：
+```yaml
+plugin_config:
+    "@type": type.googleapis.com/xds.type.v3.TypedStruct
+    value:
+        directives: |
+          {
+            "waf1":{
+              "simple_directives":[
+                [ ..... ]
+                "Include @owasp_plugins/nextcloud*.conf",
+                "Include @owasp_plugins/wordpress-rule-exclusions*.conf",
+                [ ..... ]
+              ]
+            }
+          }
+        default_directive: "waf1"
+```
 
 ## Testing
 
@@ -280,3 +300,4 @@ plugin_config:
           }
         default_directive: "waf1"
 ```
+

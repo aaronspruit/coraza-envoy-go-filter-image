@@ -29,7 +29,8 @@ func init() {
 			"@crs-setup-conf":      "crs-setup.conf.example",
 		},
 		map[string]string{
-			"@owasp_crs": "crs",
+			"@owasp_crs":     "crs",
+			"@owasp_plugins": "plugins",
 		},
 	}
 }
