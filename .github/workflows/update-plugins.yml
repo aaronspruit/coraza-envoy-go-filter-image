@@ -57,9 +57,12 @@ jobs:
             echo "---"
             echo "Checking $repo..."
 
-            # Get latest release tag
-            latest_tag=$(gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null || true)
-            if [ -z "$latest_tag" ]; then
+            # Get latest release tag (gh api exits non-zero on 404)
+            if ! latest_tag=$(gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null); then
+              echo "  No release found for $repo, skipping"
+              continue
+            fi
+            if [ -z "$latest_tag" ] || [[ "$latest_tag" == *"Not Found"* ]]; then
               echo "  No release found for $repo, skipping"
               continue
             fi
