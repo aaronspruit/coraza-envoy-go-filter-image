@@ -23,13 +23,12 @@ runExample: performanceBuild buildTestEnvoy teardownExample
 
 teardownExample:
 	docker compose --file example/docker-compose.yml down
-
 e2e: clean performanceBuild buildTestEnvoy
-	docker compose --file tests/e2e/docker-compose.yml up --abort-on-container-exit tests; \
+	docker compose --file tests/e2e/docker-compose.yml up --abort-on-container-exit tests --exit-code-from tests; \
 	docker compose --file tests/e2e/docker-compose.yml down
 
 ftw: clean performanceBuild buildTestEnvoy
-	docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
+	docker compose --file tests/ftw/docker-compose.yml up --abort-on-container-exit ftw-crs --exit-code-from ftw-crs; \
 	docker compose --file tests/ftw/docker-compose.yml down
 
 clean:
