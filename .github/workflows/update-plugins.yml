@@ -133,12 +133,12 @@ jobs:
 
           echo "---"
           echo "Updated plugins:"
-          printf '  - %s\n' "${updated[@]}"
+          printf -- '  - %s\n' "${updated[@]}"
 
           # Write summary for PR body
           {
             echo "UPDATED_PLUGINS<<EOF"
-            printf '- %s\n' "${updated[@]}"
+            printf -- '- %s\n' "${updated[@]}"
             echo "EOF"
           } >> "$GITHUB_ENV"
 
