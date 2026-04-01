@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.5.1] - 2026-04-01
+
+### Changed
+- Actually added the CRS plugin files via "chore: update CRS plugins ([#13](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/13))
+
 ## [v1.5.0] - 2026-04-01
 
 ### Changed
