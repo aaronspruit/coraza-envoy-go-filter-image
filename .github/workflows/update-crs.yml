@@ -1,0 +1,84 @@
+name: Update CRS
+
+on:
+  schedule:
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-crs:
+    name: Check for CRS updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v6
+
+      - name: Get current CRS version
+        id: current
+        run: echo "version=$(cat CRS_VERSION | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Get latest CRS release
+        id: latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest=$(gh api repos/coreruleset/coreruleset/releases/latest --jq '.tag_name' | sed 's/^v//')
+          echo "version=$latest" >> "$GITHUB_OUTPUT"
+
+      - name: Update CRS files
+        if: steps.current.outputs.version != steps.latest.outputs.version
+        env:
+          LATEST: ${{ steps.latest.outputs.version }}
+        run: |
+          set -e
+          echo "Updating CRS from ${{ steps.current.outputs.version }} to ${LATEST}"
+
+          # Download and extract new CRS release
+          curl -sL "https://github.com/coreruleset/coreruleset/archive/refs/tags/v${LATEST}.tar.gz" -o crs.tar.gz
+          mkdir -p /tmp/crs
+          tar -xzf crs.tar.gz --strip-components=1 -C /tmp/crs
+          rm crs.tar.gz
+
+          # Update embedded CRS rule files
+          rm -rf internal/config/rules/crs/
+          mkdir -p internal/config/rules/crs/
+          cp /tmp/crs/rules/*.conf internal/config/rules/crs/
+          cp /tmp/crs/rules/*.data internal/config/rules/crs/
+
+          # Update crs-setup.conf.example
+          cp /tmp/crs/crs-setup.conf.example internal/config/rules/crs-setup.conf.example
+
+          # Update CRS_VERSION file
+          echo "${LATEST}" > CRS_VERSION
+
+          # FTW Dockerfile and docker-compose read CRS_VERSION at build time, no update needed
+
+          # Update CHANGELOG.md — append entry under the latest unreleased "### Changed" section
+          awk -v ver="${LATEST}" '/^### Changed$/ && !done { print; print "- Update CRS to version " ver; done=1; next } 1' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
+
+          rm -rf /tmp/crs
+
+      - name: Create Pull Request
+        if: steps.current.outputs.version != steps.latest.outputs.version
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.CRS_BOT_TOKEN }}
+          commit-message: "Update CRS to v${{ steps.latest.outputs.version }}"
+          title: "chore: update CRS to v${{ steps.latest.outputs.version }}"
+          body: |
+            Automated update of OWASP Core Rule Set from v${{ steps.current.outputs.version }} to v${{ steps.latest.outputs.version }}.
+
+            Changes:
+            - Updated embedded CRS rule files in `internal/config/rules/crs/`
+            - Updated `crs-setup.conf.example`
+            - Updated CRS version in FTW test Dockerfile
+            - Updated `CRS_VERSION` tracking file
+
+            [Release notes](https://github.com/coreruleset/coreruleset/releases/tag/v${{ steps.latest.outputs.version }})
+          branch: chore/update-crs-v${{ steps.latest.outputs.version }}
+          labels: dependencies
+          assignees: aaronspruit

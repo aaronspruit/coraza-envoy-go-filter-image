@@ -1,11 +1,34 @@
 # Changelog
 
-## [v1.4.0] - 2026-XX-XX
+## [v1.5.0] - 2026-03-31
 
 ### Changed
-- Update coraza to version 3.6.0 ([#71](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/71))([kabbohus](https://github.com/kabbohus)) ([#74](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/74))([kabbohus](https://github.com/kabbohus))
-- The Coraza filter now automatically appends the appropriate port (HTTP or HTTPS) to the Host header when no direct match is found in the host directive map. If a match is still not found, it gracefully falls back to the default directive. ([#73](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/73))([kabbohus](https://github.com/kabbohus))
-- Switch to using slog for logging ([#67](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/67))([kabbohus](https://github.com/kabbohus)) ([#70](https://github.com/united-security-providers/coraza-envoy-go-filter/pull/70))([kabbohus](https://github.com/kabbohus))
+- Bump github.com/corazawaf/coraza/v3 from 3.5.0 to 3.6.0 ([#8](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/8))
+
+## [v1.4.0] - 2026-03-31
+
+### Changed
+- Updated readme to help with EnvoyGateway Installation ([aaronspruit](https://github.com/aaronspruit))
+- Bump github.com/corazawaf/coraza/v3 from 3.4.0 to 3.5.0 ([#7](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/7))
+- Bump docker/metadata-action from 5 to 6 ([#3](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/3))
+- Bump docker/build-push-action from 6 to 7 ([#4](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/4))
+- Bump docker/login-action from 3 to 4 ([#5](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/5))
+- Bump peter-evans/create-pull-request from 7 to 8 ([#6](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/6))
+
+## [v1.3.5] - 2026-03-31
+
+### Changed
+- Update CRS to version 4.25 ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
+- Reduced image size ([#2](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/2))
+
+## [v1.3.1-alpha] - 2026-03-30
+
+### Changed
+- Pin Envoy base image to `contrib-v1.37.1` instead of `contrib-dev` ([aaronspruit](https://github.com/aaronspruit))
+- Reduce final Docker image size by copying libre2 from build stage instead of installing via apt ([aaronspruit](https://github.com/aaronspruit))
+- Publish Docker image to GitHub Container Registry on release ([aaronspruit](https://github.com/aaronspruit))
+- Use performance build in release workflow ([aaronspruit](https://github.com/aaronspruit))
+- Add Dependabot monitoring for Docker base image updates ([aaronspruit](https://github.com/aaronspruit))
 
 ## [v1.3.0] - 2026-03-12
 
@@ -104,6 +127,7 @@ _First release._
 ### Known Issues
 - A bug in Coraza results in a wrong HTTP status code returned, if `SecResponseBodyLimit` is reached and `SecResponseBodyLimitAction` is set to `Reject`. Coraza incorrectly returns HTTP 413 instead of HTTP 500. ([corazawaf/coraza#1377](https://github.com/corazawaf/coraza/issues/1377))
 
+[v1.3.1-alpha]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.3.1-alpha
 [v1.3.0]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.3.0
 [v1.2.3]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.2.3
 [v1.2.2]: https://github.com/united-security-providers/coraza-envoy-go-filter/releases/tag/v1.2.2

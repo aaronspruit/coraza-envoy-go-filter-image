@@ -1,6 +1,8 @@
 BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders
 GOLANG-CI-LINT-VERSION := v2.10.1
 BUILD-DIRECTORY := ./build
+CRS_VERSION := $(shell cat CRS_VERSION | tr -d '[:space:]')
+export CRS_VERSION
 
 .PHONY: build
 build:
@@ -14,9 +16,9 @@ performanceBuild:
 
 # Build the envoy image that we are going to use for tests and examples
 buildTestEnvoy:
-	docker build --target envoy --build-arg BUILD_TAGS=$(BUILD-TAGS) . -t coraza-waf-envoy
+	docker build --target envoy-coraza --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-envoy
 
-start-watcher: clean build buildTestEnvoy
+start-watcher: clean performanceBuild buildTestEnvoy
 	docker compose down
 	docker compose up -d
 	@echo "Watching coraza-waf.so for changes..."
@@ -25,11 +27,11 @@ start-watcher: clean build buildTestEnvoy
 		docker compose restart envoy || docker compose up -d envoy; \
 	done
 
-e2e: clean build buildTestEnvoy
+e2e: clean performanceBuild buildTestEnvoy
 	docker compose --file tests/e2e/docker-compose.yml up --abort-on-container-exit tests; \
 	docker compose --file tests/e2e/docker-compose.yml down
 
-ftw: clean build buildTestEnvoy
+ftw: clean performanceBuild buildTestEnvoy
 	docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
 	docker compose --file tests/ftw/docker-compose.yml down
 
@@ -37,6 +39,7 @@ clean:
 	docker compose down
 	docker compose --file tests/e2e/docker-compose.yml down
 	docker compose --file tests/ftw/docker-compose.yml down
+	docker rmi -f coraza-waf-builder coraza-waf-envoy ftw-ftw ftw-ftw-crs e2e-sse-server e2e-tests envoy-check
 	rm -rf $(BUILD-DIRECTORY)/*
 
 lint:
