@@ -1,4 +1,4 @@
-BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders
+BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders,coraza.rule.rx_prefilter,coraza.rule.rx_prefilter
 GOLANG-CI-LINT-VERSION := v2.10.1
 BUILD-DIRECTORY := ./build
 CRS_VERSION := $(shell grep '^crs=' CRS_VERSION | cut -d= -f2 | tr -d '[:space:]')
