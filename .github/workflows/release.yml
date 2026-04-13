@@ -53,7 +53,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Release Candidate
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: ${{ contains(github.ref_name, '-rc') }}
         with:
           body_path: '${{ steps.notes.outputs.file }}'
@@ -64,7 +64,7 @@ jobs:
             LICENSE
             build/coraza-waf.so
       - name: Final Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: ${{ !contains(github.ref_name, '-rc') }}
         with:
           body_path: '${{ steps.notes.outputs.file }}'
