@@ -1,4 +1,4 @@
-BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders,coraza.rule.rx_prefilter,coraza.rule.rx_prefilter
+BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders,coraza.rule.rx_prefilter
 GOLANG-CI-LINT-VERSION := v2.10.1
 BUILD-DIRECTORY := ./build
 CRS_VERSION := $(shell grep '^crs=' CRS_VERSION | cut -d= -f2 | tr -d '[:space:]')
@@ -18,26 +18,29 @@ performanceBuild:
 buildTestEnvoy:
 	docker build --target envoy-coraza --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-envoy
 
-runExample: performanceBuild buildTestEnvoy teardownExample
-	docker compose --file example/docker-compose.yml up -d
-
-teardownExample:
-	docker compose --file example/docker-compose.yml down
+start-watcher: clean build buildTestEnvoy
+	docker compose down
+	docker compose up -d
+	@echo "Watching coraza-waf.so for changes..."
+	@while inotifywait --quiet -e create -e attrib -e modify $(BUILD-DIRECTORY); do \
+		echo "Change detected! Restarting envoy..." && \
+		docker compose restart envoy || docker compose up -d envoy; \
+	done
 
 e2e: clean performanceBuild buildTestEnvoy
-	docker compose --file tests/e2e/docker-compose.yml run --rm tests; \
-	exit_code=$$?; \
+	docker compose --file tests/e2e/docker-compose.yml up --build --abort-on-container-exit tests; \
+	EXIT_CODE=$$?; \
 	docker compose --file tests/e2e/docker-compose.yml down; \
-	exit $$exit_code
+	exit $$EXIT_CODE
 
 ftw: clean performanceBuild buildTestEnvoy
-	docker compose --file tests/ftw/docker-compose.yml run --rm ftw-crs; \
-	exit_code=$$?; \
+	docker compose --file tests/ftw/docker-compose.yml up --build ftw-crs --exit-code-from ftw-crs; \
+	EXIT_CODE=$$?; \
 	docker compose --file tests/ftw/docker-compose.yml down; \
-	exit $$exit_code
+	exit $$EXIT_CODE
 
 clean:
-	docker compose --file example/docker-compose.yml down
+	docker compose down
 	docker compose --file tests/e2e/docker-compose.yml down
 	docker compose --file tests/ftw/docker-compose.yml down
 	docker rmi -f coraza-waf-builder coraza-waf-envoy ftw-ftw ftw-ftw-crs e2e-sse-server e2e-tests envoy-check

@@ -167,8 +167,10 @@ func errorCallback(error ctypes.MatchedRule) {
 			api.LogWarn(msg)
 		case ctypes.RuleSeverityNotice, ctypes.RuleSeverityInfo, ctypes.RuleSeverityDebug:
 			api.LogInfo(msg)
+		default:
+			// in case we don't have a rule severity make sure the rule appears in the logs by using error level
+			api.LogError(msg)
 		}
-
 		return
 	}
 
@@ -248,5 +250,8 @@ func errorCallback(error ctypes.MatchedRule) {
 		logger.Warn(msg)
 	case ctypes.RuleSeverityNotice, ctypes.RuleSeverityInfo, ctypes.RuleSeverityDebug:
 		logger.Info(msg)
+	default:
+		// in case we don't have a rule severity make sure the rule appears in the logs by using error level
+		logger.Error(msg)
 	}
 }
