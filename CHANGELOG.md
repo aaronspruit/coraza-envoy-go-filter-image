@@ -12,6 +12,7 @@
 - Bump softprops/action-gh-release from 2 to 3 ([#21](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/21))
 - Bump debian from 11-slim to 13-slim ([#24](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/24))
 - Bump mccutchen/go-httpbin from 2.18.1 to 2.22.0 ([#20](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/20))
+- Bump alpine from 3.16 to 3.23 ([#23](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/23))
 
 ## [v1.5.2] - 2026-04-03
 
