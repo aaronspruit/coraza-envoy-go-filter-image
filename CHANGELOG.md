@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.5.3] - 2026-04-13
+
+### Changed
+- Bump github.com/envoyproxy/envoy from 1.37.1 to 1.37.2 ([#16](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/16))
+
 ## [v1.5.2] - 2026-04-03
 
 ### Changed
