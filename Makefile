@@ -28,12 +28,14 @@ start-watcher: clean build buildTestEnvoy
 	done
 
 e2e: clean performanceBuild buildTestEnvoy
+	rm -rf tests/e2e/logs/*
 	docker compose --file tests/e2e/docker-compose.yml up --build --abort-on-container-exit tests; \
 	EXIT_CODE=$$?; \
 	docker compose --file tests/e2e/docker-compose.yml down; \
 	exit $$EXIT_CODE
 
 ftw: clean performanceBuild buildTestEnvoy
+	rm -rf tests/ftw/logs/*
 	docker compose --file tests/ftw/docker-compose.yml up --build ftw-crs --exit-code-from ftw-crs; \
 	EXIT_CODE=$$?; \
 	docker compose --file tests/ftw/docker-compose.yml down; \
