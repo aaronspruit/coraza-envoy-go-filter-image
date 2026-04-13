@@ -6,6 +6,7 @@
 - Pulled in upstream changes - fixes FTW for 3.7.0 🤷‍♂️ ([#18](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/18))
 - Bump github.com/envoyproxy/envoy from 1.37.1 to 1.37.2 ([#16](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/16))
 - Bump github.com/corazawaf/coraza/v3 from 3.6.0 to 3.7.0 ([#15](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/15))
+- Bump softprops/action-gh-release from 2 to 3 ([#21](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/21))
 - Bump debian from 11-slim to 13-slim ([#24](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/24))
 
 ## [v1.5.2] - 2026-04-03
