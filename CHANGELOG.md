@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.6.0] - 2026-XX-XX
+## [v1.6.0] - 2026-04-13
 
 > [!WARNING]
 > This release is using the performance build (as per normal) _and_ the new Coraza `SecRxPreFilter` directive per https://github.com/corazawaf/coraza/pull/1589
