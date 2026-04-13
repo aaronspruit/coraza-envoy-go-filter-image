@@ -2,12 +2,16 @@
 
 ## [v1.6.0] - 2026-XX-XX
 
+> [!WARNING]
+> This release is using the performance build (as per normal) _and_ the new Coraza `SecRxPreFilter` directive per https://github.com/corazawaf/coraza/pull/1589
+
 ### Changed
 - Pulled in upstream changes - fixes FTW for 3.7.0 🤷‍♂️ ([#18](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/18))
 - Bump github.com/envoyproxy/envoy from 1.37.1 to 1.37.2 ([#16](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/16))
 - Bump github.com/corazawaf/coraza/v3 from 3.6.0 to 3.7.0 ([#15](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/15))
 - Bump softprops/action-gh-release from 2 to 3 ([#21](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/21))
 - Bump debian from 11-slim to 13-slim ([#24](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/24))
+- Bump mccutchen/go-httpbin from 2.18.1 to 2.22.0 ([#20](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/20))
 - Bump alpine from 3.16 to 3.23 ([#23](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/23))
 
 ## [v1.5.2] - 2026-04-03
