@@ -23,6 +23,15 @@ updates:
       - "/tests/ftw"
       - "/tests/e2e"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+    assignees:
+      - "aaronspruit"
+  - package-ecosystem: "docker-compose"
+    directories:
+      - "/"
+      - "/tests/ftw"
+      - "/tests/e2e"
+    schedule:
+      interval: "daily"
     assignees:
       - "aaronspruit"
