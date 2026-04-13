@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.6.0] - 2026-XX-XX
+
+### Changed
+- Bump github.com/corazawaf/coraza/v3 from 3.6.0 to 3.7.0 ([#15](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/15))
+- Pulled in upstream changes - fixes FTW for 3.7.0 🤷‍♂️ ([#18](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/18))
+
 ## [v1.5.2] - 2026-04-03
 
 ### Changed
