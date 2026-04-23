@@ -1,7 +1,7 @@
 crs=4.25.0
 # CRS Plugins (owner/repo=version)
 # Managed by .github/workflows/update-plugins.yml
-coreruleset/template-plugin=64e77842cbce6eb757a04171c98c7ed0b0c84c74
+coreruleset/template-plugin=20f56cd12f8c414ee736e466dd42b3366bbc70e6
 coreruleset/auto-decoding-plugin=5d096ad94a4f5a30803cec6d087a425b8b8930ec
 coreruleset/antivirus-plugin=e6b53a7315c8c5128d6b75b8b025df7100e909be
 coreruleset/body-decompress-plugin=80e7d9b5d1d89fe5eaccdc5cba1fbe174efc0e44
