@@ -3,6 +3,7 @@
 ## [v1.6.0] - 2026-XX-XX
 
 ### Changed
+- Bump coreruleset/go-ftw from 2.1.0 to 2.1.1 ([#27](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/27))
 - Bump mccutchen/go-httpbin from 2.22.0 to 2.22.1 ([#25](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/25))
 
 ## [v1.6.0] - 2026-04-13
