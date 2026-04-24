@@ -3,19 +3,19 @@ module coraza-waf
 go 1.25.9
 
 require (
-	github.com/cncf/xds/go v0.0.0-20250501225837-2ac532fd4443
+	github.com/cncf/xds/go v0.0.0-20251210132809-ee656c7534f5
 	github.com/corazawaf/coraza-wasilibs v0.2.0
 	github.com/corazawaf/coraza/v3 v3.7.0
-	github.com/envoyproxy/envoy v1.37.2
+	github.com/envoyproxy/envoy v1.38.0
 	github.com/google/uuid v1.6.0
 	github.com/json-iterator/go v1.1.12
 	google.golang.org/protobuf v1.36.11
 )
 
 require (
-	cel.dev/expr v0.15.0 // indirect
+	cel.dev/expr v0.24.0 // indirect
 	github.com/corazawaf/libinjection-go v0.3.2 // indirect
-	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
+	github.com/envoyproxy/protoc-gen-validate v1.3.0 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/goccy/go-yaml v1.18.0 // indirect
 	github.com/gotnospirit/makeplural v0.0.0-20180622080156-a5f48d94d976 // indirect
@@ -38,7 +38,7 @@ require (
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.35.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20250728155136-f173205681a0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250728155136-f173205681a0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20251202230838-ff82c1b0f217 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251202230838-ff82c1b0f217 // indirect
 	rsc.io/binaryregexp v0.2.0 // indirect
 )
