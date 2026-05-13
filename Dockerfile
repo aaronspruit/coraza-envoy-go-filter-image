@@ -16,10 +16,13 @@ WORKDIR /src
 COPY internal ./internal
 COPY main.go go.mod go.sum .
 RUN /usr/lib/go-1.23/bin/go build -o coraza-waf.so -buildmode=c-shared -tags=$BUILD_TAGS .
+RUN mkdir -p /staging/lib && \
+    cp /usr/local/lib/libinjection.so* /staging/lib/ && \
+    cp /usr/lib/*-linux-gnu/libre2.so* /staging/lib/
 ENTRYPOINT ["/usr/bin/cp", "/src/coraza-waf.so", "/build"]
 
 FROM envoyproxy/envoy:contrib-v1.38.0 AS envoy-coraza
-COPY --from=build /usr/local/lib/libinjection.so* /usr/local/lib/
-COPY --from=build /usr/lib/x86_64-linux-gnu/libre2.so* /usr/lib/x86_64-linux-gnu/
+COPY --from=build /staging/lib/libinjection.so* /usr/local/lib/
+COPY --from=build /staging/lib/libre2.so* /usr/lib/
 COPY --from=build /src/coraza-waf.so /etc/envoy/coraza-waf.so
 RUN ldconfig
