@@ -1,8 +1,14 @@
 BUILD-TAGS := coraza.rule.multiphase_evaluation,memoize_builders,coraza.rule.rx_prefilter
-GOLANG-CI-LINT-VERSION := v2.10.1
 BUILD-DIRECTORY := ./build
 CRS_VERSION := $(shell grep '^crs=' CRS_VERSION | cut -d= -f2 | tr -d '[:space:]')
 export CRS_VERSION
+
+GOLANG-CI-LINT-VERSION := v2.10.1
+PERFORMANCE-BUILD-TAGS := $(BUILD-TAGS),libinjection_cgo,re2_cgo
+
+PLATFORM ?= linux/$(shell go env GOARCH)
+DOCKER_BUILD := docker buildx build --platform $(PLATFORM) --load
+DOCKER_BUILD_ARGS := --build-arg BUILD_TAGS=$(PERFORMANCE-BUILD-TAGS)
 
 .PHONY: build
 build:
@@ -11,12 +17,11 @@ build:
 
 performanceBuild:
 	mkdir -p $(BUILD-DIRECTORY)
-	docker build --target build --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-builder
+	$(DOCKER_BUILD) --target build $(DOCKER_BUILD_ARGS) . -t coraza-waf-builder
 	docker cp $$(docker create coraza-waf-builder):/src/coraza-waf.so $(BUILD-DIRECTORY)
 
-# Build the envoy image that we are going to use for tests and examples
 buildTestEnvoy:
-	docker build --target envoy-coraza --build-arg BUILD_TAGS=$(BUILD-TAGS),libinjection_cgo,re2_cgo . -t coraza-waf-envoy
+	$(DOCKER_BUILD) --target envoy-coraza $(DOCKER_BUILD_ARGS) . -t coraza-waf-envoy
 
 start-watcher: clean build buildTestEnvoy
 	docker compose down
