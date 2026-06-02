@@ -3,6 +3,7 @@
 ## [v1.6.0] - 2026-XX-XX
 
 ### Changed
+- Update CRS to version 4.27.0
 - Bump envoyproxy/envoy from v1.37.2 to v1.38 ([#30](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/30))
 - chore: update CRS plugins ([#28](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/28))
 - Bump coreruleset/go-ftw from 2.1.0 to 2.1.1 ([#27](https://github.com/aaronspruit/coraza-envoy-go-filter-image/pull/27))

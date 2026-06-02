@@ -1,4 +1,4 @@
-crs=4.25.0
+crs=4.27.0
 # CRS Plugins (owner/repo=version)
 # Managed by .github/workflows/update-plugins.yml
 coreruleset/template-plugin=20f56cd12f8c414ee736e466dd42b3366bbc70e6
