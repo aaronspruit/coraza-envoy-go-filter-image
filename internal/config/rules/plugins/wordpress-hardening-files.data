@@ -18,7 +18,14 @@
 /wp-content/wp-rocket-config
 /wp-content/uploads/sucuri
 /wp-content/uploads/updraft
-/wp-content/backups-dup-pro
 /wp-content/index.php
 /wp-admin/install
 /wp-admin/includes
+# WP-CLI and tool configuration files
+/.wp-cli.yml
+/.wp-cli/
+/wp-cli.yml
+/wp-cli.local.yml
+# PHP per-directory config and WP debug log (defence in depth — also caught by .ini/.log regex)
+/.user.ini
+/wp-content/debug.log

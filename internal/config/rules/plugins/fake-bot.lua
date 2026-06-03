@@ -1,6 +1,6 @@
 -- -----------------------------------------------------------------------
 -- OWASP CRS Plugin
--- Copyright (c) 2022-2024 CRS project. All rights reserved.
+-- Copyright (c) 2022-2026 CRS project. All rights reserved.
 --
 -- The OWASP CRS plugins are distributed under
 -- Apache Software License (ASL) version 2
@@ -48,13 +48,13 @@ function main(matched_bot)
 		m.log(2, "Fake Bot Plugin ERROR: LuaSocket library not installed, please install it or disable this plugin.")
 		return nil
 	end
-	if matched_bot == "googlebot" then
+	if matched_bot == "googlebot" or matched_bot == "googleother" then
 		-- https://developers.google.com/search/docs/advanced/crawling/verifying-googlebot
 		bot_domains = {".googlebot.com", ".google.com"}
 		bot_name = "Googlebot"
-	elseif matched_bot == "facebookexternalhit" or matched_bot == "facebookcatalog" or matched_bot == "facebookbot" then
-		-- https://developers.facebook.com/docs/sharing/webmasters/crawler/
-		-- https://developers.facebook.com/docs/sharing/bot/
+	-- We can no longer support 'facebookexternalhit' UA string as Facebook started to use IP addresses without reverse record in DNS.
+	elseif matched_bot == "facebookcatalog" or matched_bot == "facebookbot" then
+		-- https://developers.facebook.com/docs/sharing/webmasters/web-crawlers
 		bot_domains = {".facebook.com", ".fbsv.net"}
 		bot_name = "Facebookbot"
 	elseif matched_bot == "bingbot" then
