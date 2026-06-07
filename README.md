@@ -1,3 +1,6 @@
+> [!WARNING]
+> This is archived now that upstream has published an image to use with Envoy Gateway
+
 # coraza-envoy-go-filter
 
 * [Coraza](https://github.com/corazawaf/coraza) Web Application Firewall implemented as Envoy Go Filter.
